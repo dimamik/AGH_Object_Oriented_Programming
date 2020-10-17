@@ -1,7 +1,8 @@
 package agh.cs.lab2;
 
 import org.junit.jupiter.api.Test;
-
+// In this test class
+// I would be using default methods naming convention
 import static org.junit.jupiter.api.Assertions.*;
 class MapDirectionTest {
 
