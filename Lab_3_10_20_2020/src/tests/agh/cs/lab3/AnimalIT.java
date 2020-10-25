@@ -1,4 +1,4 @@
-package agh.cs.lab2;
+package agh.cs.lab3;
 
 import org.junit.jupiter.api.Test;
 
