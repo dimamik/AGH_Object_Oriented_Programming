@@ -1,10 +1,12 @@
-package agh.cs.lab5_6.maps;
+package agh.cs.lab5_and_others.maps;
 
-import agh.cs.lab5_6.movement.Vector2d;
-import agh.cs.lab5_6.objects.Grass;
-import agh.cs.lab5_6.objects.IMapElement;
+import agh.cs.lab5_and_others.movement.Vector2d;
+import agh.cs.lab5_and_others.objects.Animal;
+import agh.cs.lab5_and_others.objects.Grass;
+import agh.cs.lab5_and_others.objects.IMapElement;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -22,14 +24,39 @@ public class GrassField extends AbstractWorldMap {
      *
      * @param grassAmount - Amount of grass objects to be randomly distributed
      * @AncestorData protected HashMap<Vector2d, Animal> animalHashMap; protected
-     *               MapVisualiser mapVisualiser;
+     * MapVisualiser mapVisualiser;
      */
     public GrassField(int grassAmount) {
         super();
         this.grassAmount = grassAmount;
         grassHashMap = new HashMap<>();
         placeGrass();
+        mapBoundary = new MapBoundary(grassHashMap);
+    }
 
+    /**
+     * Place NEW Animal on map
+     *
+     * @param animal - new animal to position
+     *               Differs from place that it only works with new elements
+     */
+    public void initial_place(Animal animal) {
+        if (animal.getPosition() != null && canMoveTo(animal.getPosition())) {
+            animalHashMap.put(animal.getPosition(), animal);
+            animal.addObserver(this);
+            animal.addObserver(mapBoundary);
+            mapBoundary.positionAdded(animal, animal.getPosition());
+        }
+    }
+
+    /**
+     * Help function to generate random int
+     *
+     * @param grassAmount - amount of grass
+     * @return random int
+     */
+    private int generateRandomInt(int grassAmount) {
+        return ThreadLocalRandom.current().nextInt(0, (int) (Math.sqrt(grassAmount * 10)) + 1);
     }
 
     /**
@@ -37,27 +64,27 @@ public class GrassField extends AbstractWorldMap {
      */
     private void placeGrass() {
         int i = 0;
-       while(i++ < grassAmount) {
-            int randomNum = ThreadLocalRandom.current().nextInt(0, (int) (Math.sqrt(grassAmount * 10)) + 1);
-            int randomNum2 = ThreadLocalRandom.current().nextInt(0, (int) (Math.sqrt(grassAmount * 10)) + 1);
+        while (i++ < grassAmount) {
+            int randomNum = generateRandomInt(grassAmount);
+            int randomNum2 = generateRandomInt(grassAmount);
             Grass toAdd = new Grass(new Vector2d(randomNum, randomNum2));
-            if (! grassHashMap.containsKey(toAdd.getPosition()))
+            if (!grassHashMap.containsKey(toAdd.getPosition()))
                 grassHashMap.put(toAdd.getPosition(), toAdd);
             else i--;
         }
     }
 
     /**
-     * Indicate whether object that can move directly (not grass) can move to Given
-     * position
-     *
      * @param position The position checked for the movement possibility.
-     * @return Truth if can, else False
+     * @return - if can move to given position
      */
     @Override
     public boolean canMoveTo(Vector2d position) {
-        IMapElement imapElement = (IMapElement) (objectAt(position).orElse(null));
-        return imapElement == null || ! imapElement.isMovable();
+        if ((objectAt(position).isEmpty())) return true;
+        else {
+            IMapElement imapElement = (IMapElement) (objectAt(position).get());
+            return !imapElement.isMovable();
+        }
     }
 
     /**
@@ -94,37 +121,12 @@ public class GrassField extends AbstractWorldMap {
     }
 
     /**
-     * Help function for toString(), Calculates the left bottom and right top
-     * borders of map
+     * Function that needs to be deleted before final release
      *
-     * @return List of Vector2d where zero element is left_bottom corner and first
-     *         element is right_top corner
+     * @return - grass hashmap
+     * TODO DELETE_Before_final
      */
-    protected List<Vector2d> getBorders() {
-        List<Vector2d> to_ret = new ArrayList<>();
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        Iterator<Vector2d> iterator = animalHashMap.keySet().iterator();
-        Iterator<Vector2d> iterator2 = grassHashMap.keySet().iterator();
-        while (iterator.hasNext()) {
-            Vector2d fk = iterator.next();
-            min = Math.min(min, fk.x);
-            min = Math.min(min, fk.y);
-            max = Math.max(max, fk.x);
-            max = Math.max(max, fk.y);
-            if (!iterator.hasNext()) {
-                iterator = iterator2;
-            }
-        }
-        Vector2d f1 = new Vector2d(min, min);
-        Vector2d s1 = new Vector2d(max, max);
-        to_ret.add(f1);
-        to_ret.add(s1);
-        return to_ret;
-    }
-
     public HashMap<Vector2d, Grass> getGrassHashMap() {
         return grassHashMap;
     }
-
 }

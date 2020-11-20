@@ -1,6 +1,6 @@
-package agh.cs.lab5_6.directions;
+package agh.cs.lab5_and_others.directions;
 
-import agh.cs.lab5_6.movement.Vector2d;
+import agh.cs.lab5_and_others.movement.Vector2d;
 
 public enum MapDirection {
     NORTH, SOUTH, WEST, EAST;

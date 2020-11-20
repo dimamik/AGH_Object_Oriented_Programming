@@ -1,9 +1,10 @@
-package agh.cs.lab5_6.maps;
+package agh.cs.lab5_and_others.maps;
 
-import agh.cs.lab5_6.directions.MoveDirection;
-import agh.cs.lab5_6.movement.Vector2d;
-import agh.cs.lab5_6.objects.Animal;
-import agh.cs.lab5_6.visual.MapVisualiser;
+import agh.cs.lab5_and_others.directions.MoveDirection;
+import agh.cs.lab5_and_others.movement.Vector2d;
+import agh.cs.lab5_and_others.objects.Animal;
+import agh.cs.lab5_and_others.objects.IMapElement;
+import agh.cs.lab5_and_others.visual.MapVisualiser;
 
 import java.util.*;
 
@@ -12,9 +13,10 @@ import java.util.*;
  * objects can be placed.
  * //TODO Can be better standardised using IMovable interface
  */
-public abstract class AbstractWorldMap implements IWorldMap {
-    protected final HashMap<Vector2d, Animal> animalHashMap;
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
+    protected final HashMap<Vector2d, IMapElement> animalHashMap;
     protected final MapVisualiser mapVisualiser;
+    protected MapBoundary mapBoundary;
 
     /**
      * Default Constructor to be used by children
@@ -25,20 +27,13 @@ public abstract class AbstractWorldMap implements IWorldMap {
     }
 
     /**
-     * Indicate if any object can move to the given position.
-     *
-     * @param position The position checked for the movement possibility.
-     * @return True if the object can move to that position.
-     * @implNote Depends on object-transaction properties
-     */
-    abstract public boolean canMoveTo(Vector2d position);
-
-    /**
-     * Place an animal on the map.
+     * Place an existing animal on the map.
+     * Is used only with previous removing that animal
      *
      * @param animal The animal to place on the map.
      * @throws IllegalArgumentException if can't place an animal
      */
+    @Override
     public void place(Animal animal) {
         if (animal.getPosition() != null && canMoveTo(animal.getPosition())) {
             animalHashMap.put(animal.getPosition(), animal);
@@ -59,16 +54,16 @@ public abstract class AbstractWorldMap implements IWorldMap {
      * because if we won't do this, we'll need to deal
      * with ConcurrentModificationException
      */
+    @Override
     public void run(List<MoveDirection> directions) {
-        List<Animal> listOfAnimals = new LinkedList<>(animalHashMap.values());
-        Iterator<Animal> animalIterator = listOfAnimals.iterator();
+        List<IMapElement> listOfAnimals = new LinkedList<>(animalHashMap.values());
+        Iterator<IMapElement> animalIterator = listOfAnimals.iterator();
         Iterator<MoveDirection> directionsIterator = directions.iterator();
         while (animalIterator.hasNext() && directionsIterator.hasNext()) {
-            Animal currAnimal = animalIterator.next();
+            Animal currAnimal = (Animal) animalIterator.next();
             animalHashMap.remove(currAnimal.getPosition());
             MoveDirection currDirection = directionsIterator.next();
             currAnimal.move(currDirection);
-
             place(currAnimal);
             if (!animalIterator.hasNext() && directionsIterator.hasNext()) {
                 animalIterator = listOfAnimals.iterator();
@@ -84,8 +79,9 @@ public abstract class AbstractWorldMap implements IWorldMap {
      * @param position Position to check.
      * @return True if the position is occupied.
      */
+    @Override
     public boolean isOccupied(Vector2d position) {
-            return animalHashMap.containsKey(position);
+        return animalHashMap.containsKey(position);
     }
 
     /**
@@ -95,30 +91,31 @@ public abstract class AbstractWorldMap implements IWorldMap {
      * @return Object or empty Optional if the position is not occupied.
      * @implNote Depends on objects on map (which can be grouped by interface)
      */
+    @Override
     public Optional<Object> objectAt(Vector2d position) {
         return Optional.ofNullable(animalHashMap.get(position));
     }
 
-    /**
-     * Help function for toString(),
-     * Calculates the left bottom and right top borders of map
-     *
-     * @return List of Vector2d where zero element is left_bottom corner
-     * and first element is right_top corner
-     */
-    abstract protected List<Vector2d> getBorders();
 
     /**
      * Function uses MapVisualiser to convert map to String
      *
      * @return String representation of map
      */
+    @Override
     public String toString() {
-        List<Vector2d> list = getBorders();
-        return mapVisualiser.draw(list.get(0), list.get(1));
+        return mapVisualiser.draw(mapBoundary.getLower(), mapBoundary.getUpper());
     }
 
-    public HashMap<Vector2d, Animal> getAnimalHashMap() {
-        return animalHashMap;
+    /**
+     * @param movedElement - element placed to newPosition
+     * @param oldPosition  - old position of element
+     * @param newPosition  - new position of element
+     */
+    @Override
+    public void positionChanged(IMapElement movedElement, Vector2d oldPosition, Vector2d newPosition) {
+        animalHashMap.remove(oldPosition);
+        animalHashMap.put(newPosition, movedElement);
     }
+
 }

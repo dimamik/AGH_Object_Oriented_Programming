@@ -1,4 +1,4 @@
-package agh.cs.lab5_6.objects;
+package agh.cs.lab5_and_others.objects;
 
 /**
  * Helps us to group Objects by mobility
@@ -7,12 +7,5 @@ package agh.cs.lab5_6.objects;
  * Grass - can't move
  */
 public interface IMapElement {
-    String toString();
-
-    boolean equals(Object o);
-
-    int hashCode();
-
     boolean isMovable();
-
 }

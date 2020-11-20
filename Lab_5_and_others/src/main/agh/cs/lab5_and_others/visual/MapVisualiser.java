@@ -1,7 +1,7 @@
-package agh.cs.lab5_6.visual;
+package agh.cs.lab5_and_others.visual;
 
-import agh.cs.lab5_6.maps.IWorldMap;
-import agh.cs.lab5_6.movement.Vector2d;
+import agh.cs.lab5_and_others.maps.IWorldMap;
+import agh.cs.lab5_and_others.movement.Vector2d;
 
 import java.util.Optional;
 
@@ -35,17 +35,17 @@ public class MapVisualiser {
      */
     public String draw(Vector2d lowerLeft, Vector2d upperRight) {
         StringBuilder builder = new StringBuilder();
-        for (int i = upperRight.y + 1; i >= lowerLeft.y - 1; i--) {
-            if (i == upperRight.y + 1) {
+        for (int i = upperRight.getY() + 1; i >= lowerLeft.getY() - 1; i--) {
+            if (i == upperRight.getY() + 1) {
                 builder.append(drawHeader(lowerLeft, upperRight));
             }
             builder.append(String.format("%3d: ", i));
-            for (int j = lowerLeft.x; j <= upperRight.x + 1; j++) {
-                if (i < lowerLeft.y || i > upperRight.y) {
-                    builder.append(drawFrame(j <= upperRight.x));
+            for (int j = lowerLeft.getX(); j <= upperRight.getX() + 1; j++) {
+                if (i < lowerLeft.getY() || i > upperRight.getY()) {
+                    builder.append(drawFrame(j <= upperRight.getX()));
                 } else {
                     builder.append(CELL_SEGMENT);
-                    if (j <= upperRight.x) {
+                    if (j <= upperRight.getX()) {
                         builder.append(drawObject(new Vector2d(j, i)));
                     }
                 }
@@ -66,7 +66,7 @@ public class MapVisualiser {
     private String drawHeader(Vector2d lowerLeft, Vector2d upperRight) {
         StringBuilder builder = new StringBuilder();
         builder.append(" y\\x ");
-        for (int j = lowerLeft.x; j < upperRight.x + 1; j++) {
+        for (int j = lowerLeft.getX(); j < upperRight.getX() + 1; j++) {
             builder.append(String.format("%2d", j));
         }
         builder.append(System.lineSeparator());

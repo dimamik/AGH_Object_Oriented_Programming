@@ -1,6 +1,6 @@
-package agh.cs.lab5_6.objects;
+package agh.cs.lab5_and_others.objects;
 
-import agh.cs.lab5_6.movement.Vector2d;
+import agh.cs.lab5_and_others.movement.Vector2d;
 
 import java.util.Objects;
 

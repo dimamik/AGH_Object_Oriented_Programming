@@ -1,7 +1,7 @@
-import agh.cs.lab5_6.World;
-import agh.cs.lab5_6.maps.RectangularMap;
-import agh.cs.lab5_6.movement.Vector2d;
-import agh.cs.lab5_6.objects.Animal;
+import agh.cs.lab5_and_others.World;
+import agh.cs.lab5_and_others.maps.RectangularMap;
+import agh.cs.lab5_and_others.movement.Vector2d;
+import agh.cs.lab5_and_others.objects.Animal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,30 +66,7 @@ public class IntegrationTest {
         big_map = new RectangularMap(5, 5);
     }
 
-    /**
-     * It is impossible to check String because every time we get different
-     * (because of random)
-     */
-    @Test
-    void firstIntegrationTest() {
-        World.main(input1);
-        HashMap<Vector2d, Animal> HashMap = World.map.getAnimalHashMap();
-        assertEquals(HashMap.toString(), "{(1,2)=>, (3,6)=^, (31,40)=>}");
-    }
 
-    @Test
-    void secondIntegrationTest() {
-        World.main(input2);
-        HashMap<Vector2d, Animal> HashMap = World.map.getAnimalHashMap();
-        assertEquals(HashMap.toString(), "{(3,3)=<, (1,2)=<, (34,38)=>}");
-    }
-
-    @Test
-    void thirdIntegrationTest() {
-        World.main(input3);
-        HashMap<Vector2d, Animal> HashMap = World.map.getAnimalHashMap();
-        assertEquals(HashMap.toString(), "{(5,4)=>, (1,5)=^, (35,40)=>}");
-    }
 
     /**
      * Just to see that we have something on output

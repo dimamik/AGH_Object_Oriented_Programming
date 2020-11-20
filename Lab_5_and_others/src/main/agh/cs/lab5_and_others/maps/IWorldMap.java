@@ -1,8 +1,8 @@
-package agh.cs.lab5_6.maps;
+package agh.cs.lab5_and_others.maps;
 
-import agh.cs.lab5_6.directions.MoveDirection;
-import agh.cs.lab5_6.movement.Vector2d;
-import agh.cs.lab5_6.objects.Animal;
+import agh.cs.lab5_and_others.directions.MoveDirection;
+import agh.cs.lab5_and_others.movement.Vector2d;
+import agh.cs.lab5_and_others.objects.Animal;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public interface IWorldMap {
      * Place an animal on the map.
      *
      * @param animal The animal to place on the map.
-     * is already occupied.
+     *               is already occupied.
      */
     void place(Animal animal);
 

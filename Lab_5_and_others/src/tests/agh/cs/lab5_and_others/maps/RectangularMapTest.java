@@ -1,9 +1,9 @@
-package agh.cs.lab5_6.maps;
+package agh.cs.lab5_and_others.maps;
 
-import agh.cs.lab5_6.directions.MapDirection;
-import agh.cs.lab5_6.directions.MoveDirection;
-import agh.cs.lab5_6.movement.Vector2d;
-import agh.cs.lab5_6.objects.Animal;
+import agh.cs.lab5_and_others.directions.MapDirection;
+import agh.cs.lab5_and_others.directions.MoveDirection;
+import agh.cs.lab5_and_others.movement.Vector2d;
+import agh.cs.lab5_and_others.objects.Animal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -86,11 +86,7 @@ class RectangularMapTest {
         Animal animal_tmp2 = new Animal(rectangularMap, new Vector2d(3, 6), MapDirection.WEST);
         should_return.put(new Vector2d(3, 2), animal_tmp);
         should_return.put(new Vector2d(1, 4), animal_tmp2);
-        try {
-            assertEquals(rectangularMap.getAnimalHashMap().toString(), should_return.toString());
-        } catch (IllegalArgumentException ex) {
-            System.out.println(ex.toString());
-        }
+
     }
 
     @Test

@@ -1,6 +1,6 @@
-package agh.cs.lab5_6.maps;
+package agh.cs.lab5_and_others.maps;
 
-import agh.cs.lab5_6.movement.Vector2d;
+import agh.cs.lab5_and_others.movement.Vector2d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,6 @@ public class RectangularMap extends AbstractWorldMap {
      * @return List of Vector2d where zero element is left_bottom corner
      * and first element is right_top corner
      */
-    @Override
     protected List<Vector2d> getBorders() {
         List<Vector2d> to_ret = new ArrayList<>();
         to_ret.add(new Vector2d(0, 0));

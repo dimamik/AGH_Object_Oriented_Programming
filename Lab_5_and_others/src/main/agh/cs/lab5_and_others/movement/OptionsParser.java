@@ -1,6 +1,6 @@
-package agh.cs.lab5_6.movement;
+package agh.cs.lab5_and_others.movement;
 
-import agh.cs.lab5_6.directions.MoveDirection;
+import agh.cs.lab5_and_others.directions.MoveDirection;
 
 import java.util.LinkedList;
 import java.util.List;
